@@ -1,0 +1,19 @@
+# Core dependencies for S. nobilis SDM analysis
+# Install with: pip install -r requirements.txt
+# Requires GDAL system library (see README.md)
+
+numpy==2.0.2
+pandas==2.3.0
+scipy==1.13.1
+geopandas==1.0.1
+rasterio==1.4.3
+pyproj==3.6.1
+shapely==2.0.7
+contextily==1.6.2
+elapid==1.0.3
+scikit-learn==1.5.2
+matplotlib==3.9.4
+seaborn==0.13.2
+jupyter==1.0.0
+nbconvert==6.3.0
+ipywidgets>=7.0

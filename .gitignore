@@ -33,5 +33,13 @@ notebooks/texput.log
 # Composite figure PDF (keep PNG only)
 outputs/figures/*.pdf
 
+# Virtual environment
+.venv/
+venv/
+
+# Root-level LaTeX artifacts (from compiling outside research-paper/)
+/manuscript.*
+/texput.log
+
 # macOS
 .DS_Store
