@@ -1,10 +1,10 @@
-# Predicting the Distribution of *Steatoda nobilis* Using Satellite Data
+# Predicting the distribution of *Steatoda nobilis* using satellite data
 
 Species distribution modelling of the noble false widow spider across Western Europe, using satellite-derived artificial light at night and land surface temperature.
 
 ## Overview
 
-The noble false widow spider (*Steatoda nobilis*) has rapidly colonised Britain, Ireland, and northern France over the past three decades. This project combines 10,226 citizen-science occurrence records (iNaturalist + GBIF) with four satellite-derived environmental predictors — VIIRS nighttime radiance, MODIS daytime and nighttime land surface temperature (LST), and Landsat summer LST — to build a MaxEnt species distribution model across Western Europe. A logistic growth model is also fitted to the temporal expansion in Ireland (2017–2025) to project future range filling and identify high-suitability areas not yet colonised.
+The noble false widow spider (*Steatoda nobilis*) has rapidly colonised Britain, Ireland, and northern France over the past three decades. This project combines 10,226 citizen-science occurrence records (iNaturalist + GBIF) with four satellite-derived environmental predictors — VIIRS nighttime radiance, MODIS daytime and nighttime land surface temperature (LST), and Landsat summer LST — to build a MaxEnt species distribution model across Western Europe. High-suitability areas in Ireland not yet colonised are identified, and a control species (*Pholcus phalangioides*) is used to disentangle genuine range expansion from platform-driven recording effort.
 
 ## Repository structure
 
@@ -20,18 +20,18 @@ false-widow/
 │   ├── extract_points_local.py     # Sample satellite values at occurrence/background points
 │   └── generate_background.py      # Generate bias-corrected pseudo-absence background points
 ├── notebooks/
-│   └── analysis.ipynb              # MaxEnt model, cross-validation, figures, temporal analysis
+│   └── analysis.ipynb              # MaxEnt model, cross-validation, figures, control analysis
 ├── research-paper/
 │   ├── manuscript.tex              # LaTeX manuscript
-│   └── references.bib              # Bibliography
+│   ├── references.bib              # Bibliography
+│   └── custom.bst                  # Custom BibTeX style (numbered, no titles, DOI hyperlinks)
 ├── data/                           # (gitignored — see Data section below)
 │   ├── raw/                        # Raw downloads from APIs and GEE
 │   ├── processed/                  # Cleaned, analysis-ready CSVs and raster stacks
 │   └── cache/                      # Cached model and CV results (created by notebook)
 ├── outputs/                        # Figures (PNG) and suitability GeoTIFFs
-│   └── figures/                    # Composite publication figures
 ├── requirements.txt                # Core Python dependencies (pinned)
-├── requirements-fetch.txt          # Additional deps for data collection (optional)
+├── requirements-fetch.txt          # Additional deps for data collection and control analysis
 └── .gitignore
 ```
 
@@ -53,6 +53,7 @@ python3 -m venv .venv
 source .venv/bin/activate        # On Windows: .venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
+pip install -r requirements-fetch.txt   # Needed for control group analysis (pyinaturalist)
 ```
 
 Then obtain the data (see below) and run the notebook:
@@ -75,7 +76,7 @@ wget https://zenodo.org/records/XXXXXXX/files/false-widow-data.zip
 unzip false-widow-data.zip -d .
 ```
 
-This populates `data/raw/`, `data/processed/`, and the raster stacks needed by the notebook.
+This populates `data/raw/`, `data/processed/`, and `data/cache/`, including the raster stacks and cached model results needed by the notebook.
 
 ### Option B: Re-fetch from source (advanced)
 
@@ -117,7 +118,7 @@ Open and run all cells in order:
 jupyter notebook notebooks/analysis.ipynb
 ```
 
-The notebook fits the MaxEnt model, runs spatial cross-validation, computes permutation importance, generates suitability maps, fits the logistic growth model, and produces all manuscript figures.
+The notebook fits the MaxEnt model, runs spatial cross-validation, computes permutation importance, generates suitability maps, identifies high-suitability uncolonised areas, and performs the control species comparison. All manuscript and appendix figures are produced.
 
 **Caching:** Expensive computations (model fitting, CV, permutation importance, raster prediction) are cached in `data/cache/`. On subsequent runs, only the plots are regenerated. To force a full recompute, set `FORCE_RECOMPUTE = True` in the first code cell.
 
@@ -127,29 +128,61 @@ Alternatively, to execute the notebook non-interactively:
 jupyter nbconvert --to notebook --execute notebooks/analysis.ipynb --ExecutePreprocessor.timeout=600
 ```
 
+### Compiling the manuscript
+
+```bash
+cd research-paper
+pdflatex manuscript.tex
+bibtex manuscript
+pdflatex manuscript.tex
+pdflatex manuscript.tex
+```
+
+The full LaTeX + BibTeX cycle is required to resolve citations and cross-references.
+
 ## Outputs
 
 After running the notebook, the `outputs/` directory will contain:
+
+### Manuscript figures
+
+| File | Figure | Description |
+|------|--------|-------------|
+| `study_area_map.png` | Fig. 1 | Study area map with occurrence and background points |
+| `violin_plots.png` | Fig. 2 | Satellite variable distributions: presence vs background |
+| `suitability_map_combined.png` | Fig. 3 | Two-panel suitability map (Europe + Ireland) |
+| `roc_curves.png` | Fig. 4 | ROC curves (training + spatial CV folds) |
+| `variable_importance.png` | Fig. 5 | Permutation importance bar chart |
+| `response_curves.png` | Fig. 6 | Marginal response curves |
+| `ireland_uncolonised_suitable.png` | Fig. 7 | Colonised vs uncolonised high-suitability cells |
+
+### Appendix figures (control species analysis)
+
+| File | Description |
+|------|-------------|
+| `control_kde_all_variables.png` | KDE distributions of all four satellite variables for *S. nobilis*, *P. phalangioides*, and background |
+| `control_ireland_map.png` | Ireland occurrence map: both species |
+| `control_temporal.png` | Temporal comparison of annual iNaturalist records |
+| `control_viirs_comparison.png` | VIIRS radiance violin + cumulative distribution comparison |
+| `control_viirs_kde.png` | VIIRS radiance KDE comparison |
+
+### Suitability rasters (gitignored)
 
 | File | Description |
 |------|-------------|
 | `suitability_study_area_1km.tif` | Habitat suitability GeoTIFF, Western Europe (1 km) |
 | `suitability_ireland_500m.tif` | Habitat suitability GeoTIFF, Ireland (500 m) |
-| `study_area_map.png` | Occurrence + background point map |
-| `violin_plots.png` | Satellite variable distributions: presence vs background |
+
+### Other outputs
+
+| File | Description |
+|------|-------------|
 | `correlation_heatmap.png` | Predictor correlation matrix |
-| `roc_curves.png` | ROC curves (training + spatial CV folds) |
-| `variable_importance.png` | Permutation importance bar chart |
-| `response_curves.png` | Marginal response curves |
-| `suitability_map_combined.png` | Two-panel suitability map (Europe + Ireland) |
-| `temporal_combined.png` | Annual sightings + logistic colonisation curve |
-| `ireland_temporal_expansion.png` | Cumulative expansion maps (3 time periods) |
-| `ireland_uncolonised_suitable.png` | Colonised vs uncolonised high-suitability cells |
-| `figures/composite_figure.png` | Multi-panel publication figure |
+| `kde_distributions.png` | KDE distributions of satellite variables (presence vs background) |
 
 ## Citation
 
-> Carley, E. P. and Power, R. A. (2026). Predicting the expanding distribution of *Steatoda nobilis* in Western Europe using satellite observations of artificial light and land surface temperature. *Biology and Environment: Proceedings of the Royal Irish Academy*.
+> Carley, E. P. and Power, R. A. (2026). Predicting the distribution of *Steatoda nobilis* in Western Europe using satellite observations of artificial light and land surface temperature. *Biology and Environment: Proceedings of the Royal Irish Academy*.
 
 ## License
 
