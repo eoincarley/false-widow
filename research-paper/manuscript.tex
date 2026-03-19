@@ -117,7 +117,12 @@ iNaturalist and the Global Biodiversity Information Facility (GBIF; accessed via
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\columnwidth, trim=0 0 0 10]{../outputs/study_area_map.png}
-\caption{(a) Distribution of \textit{Steatoda nobilis} occurrence records (red; $n = 10{,}226$) and bias-corrected pseudo-absence background points (grey; $n = 10{,}000$) across the Western European study area (35--60\textdegree N, 12\textdegree W--15\textdegree E). The dashed rectangle indicates the Ireland zoom region shown in panel~(b). Occurrences are concentrated in southern England, Ireland, northern France, and the Iberian Peninsula, reflecting the species' established range and citizen-science recording effort on iNaturalist and GBIF. (b) Ireland inset showing the 232 occurrence records concentrated around Dublin and the eastern seaboard, with scattered records in Cork, Limerick, and Belfast, alongside 466 bias-corrected background points.}
+\caption{(a) Distribution of \textit{Steatoda nobilis} occurrence records (red; $n = 10{,}226$) 
+and bias-corrected pseudo-absence background points (grey; $n = 10{,}000$) 
+across the Western European study area (35--60\textdegree N, 12\textdegree W--15\textdegree E). 
+The dashed rectangle indicates the Ireland zoom region shown in panel~(b). 
+(b) Ireland inset showing the 232 occurrence records concentrated around Dublin and the eastern seaboard, 
+with scattered records in Cork, Limerick, and Belfast, alongside 466 bias-corrected background points.}
 \label{fig:study_area_map}
 \end{figure}
 
@@ -147,7 +152,7 @@ All four layers were reprojected to EPSG:4326, resampled using bilinear interpol
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.78\columnwidth, trim= 20 0 0 0]{../outputs/violin_plots.png}
-\caption{Violin plots comparing the distributions of four satellite-derived environmental variables at \textit{S.~nobilis} presence sites (red) versus pseudo-absence background locations (grey). Presence sites show markedly higher VIIRS nighttime radiance (median 8.7 vs 1.2~nW/cm\textsuperscript{2}/sr), confirming the species' association with artificially lit environments. Landsat summer LST is approximately 3\textdegree C warmer at presence sites (median 35.1 vs 32.3\textdegree C), while MODIS daytime and nighttime LST show narrower, warmer distributions for presences.}
+\caption{Violin plots comparing the distributions of four satellite-derived environmental variables at \textit{S.~nobilis} presence sites (red) versus pseudo-absence background locations (grey). (a)~Presence sites show markedly higher VIIRS nighttime radiance (median 8.7 vs 1.2~nW/cm\textsuperscript{2}/sr), confirming the species' association with artificially lit environments. (b)~MODIS daytime LST shows a narrower distribution for presences centred on cooler maritime values. (c)~MODIS nighttime LST is slightly higher at presence sites (median 7.9 vs 6.8\textdegree C). (d)~Landsat summer LST is approximately 3\textdegree C warmer at presence sites (median 35.1 vs 32.3\textdegree C).}
 \label{fig:violin_plots}
 \end{figure}
 
@@ -177,7 +182,7 @@ confirming that its association with artificially lit urban environments exceeds
 \subsection{MaxEnt spatial distribution modeling}
 
 The combination of georeferenced occurence data and satellite observations of environmental conditions provide
-a menas of constructing a species distribution model for \textit{S.~nobilis}.
+a means of constructing a species distribution model for \textit{S.~nobilis}.
 We use a Maximum Entropy (MaxEnt) model, one of the most widely adopted algorithms for 
 presence-only species distribution modelling \citep{Phillips2006, Phillips2008, Elith2011}. 
 MaxEnt finds the probability distribution across environmental space that has maximum entropy 
@@ -274,8 +279,6 @@ The trained model was applied to the full 1~km raster stack to produce a continu
 
 The 500~m resolution suitability surface for Ireland (Fig.~\ref{fig:suitability_maps}b) revealed a clear urban--rural gradient. Dublin and its surrounding commuter belt showed the highest predicted suitability on the island, followed by Cork, Limerick, Galway, Waterford, and Belfast. Smaller regional towns such as Kilkenny, Wexford, Drogheda, and Athlone were also visible as localised pockets of elevated suitability. Rural areas, particularly in the west and northwest, showed consistently low suitability values, reflecting lower ALAN and cooler summer LST. The finer spatial resolution of the Ireland stack (500~m vs 1~km) allowed individual towns and suburban areas to be resolved more clearly than in the study-area map.
 
-To identify areas where the species has not yet been recorded but where the model predicts favourable conditions, we aggregated the Ireland suitability surface to ${\sim}$10~km grid cells and compared already-colonised cells ($n = 72$ with $\geq$1 record) against cells with high predicted suitability ($\geq$ 0.4) but no records to date (Fig.~\ref{fig:uncolonised_suitable}). A total of 34 high-suitability uncolonised cells were identified, concentrated in the Irish midlands and in regional towns with moderate urban development but relatively low citizen-science recorder activity. The top candidate areas for future colonisation include the Tullamore--Athlone corridor in the midlands, the greater Waterford area, Naas and surrounding County Kildare, the Ennis--Shannon area in County Clare, Navan in County Meath, and the Dundalk--Newry cross-border region. These locations share common characteristics: moderate levels of artificial lighting, proximity to existing colonised cells, and the presence of residential and commercial buildings that provide the heated structures favoured by the species.
-
 \subsection{Model performance}
 
 Model discrimination was evaluated using the area under the receiver operating characteristic (ROC) curve, or AUC. 
@@ -294,28 +297,28 @@ the false positive rare (FPR) refers to background points ranked above a given t
 so AUC measures the model's ability to distinguish occupied environments from the landscape as a
 whole \citep{Phillips2006, Elith2011}. 
 Values above ${\sim}$0.7 are generally considered useful for presence--background models \citep{Elith2006}. 
-The ROC curve for the full training dataset is shown in Fig.~\ref{fig:roc_curves}.
+The ROC curve for the full training dataset is shown in Fig.~\ref{fig:roc_curves}, achieving an AUC of 0.80 (Fig.~\ref{fig:roc_curves}).
+
 \begin{figure}[!tbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{../outputs/roc_curves.png}
+\includegraphics[width=\columnwidth]{../outputs/roc_curves.png}
 \caption{Receiver operating characteristic (ROC) curves for the MaxEnt model. The black curve shows the training ROC (AUC~=~0.80) computed on the full dataset; coloured curves show the four spatially blocked cross-validation folds (AUC~=~0.65--0.74). The gap between the training curve and the CV fold curves reflects the inflation of apparent performance by spatial autocorrelation. The dashed diagonal indicates random discrimination (AUC~=~0.5).}
 \label{fig:roc_curves}
 \end{figure}
-The full-data MaxEnt model achieved a AUC of 0.80 (Fig.~\ref{fig:roc_curves}).
 
 %Two distinct modelling steps were performed. 
 %First, a single MaxEnt model was trained on the \emph{entire} presence--background dataset 
 %(9,967 presences and 8,343 background points); this is the model used for all subsequent predictions, 
 %response curves, and suitability mapping. 
-In addition to model training on the full data set described above, a separate cross-validation procedure was carried 
-out to obtain an honest estimate of how well the model generalises to unseen regions.
+In addition to model training on the full data set, a separate cross-validation procedure was carried 
+out to obtain an un-biased estimate of how well the model generalises to unseen regions.
 
 %Standard random cross-validation tends to produce optimistic 
 %performance estimates for spatial data, 
 %because nearby training and test points share similar environmental 
 %conditions through spatial autocorrelation \citep{Roberts2017}. 
 %To avoid this bias, 
-we used 4-fold spatially blocked cross-validation 
+We used 4-fold spatially blocked cross-validation 
 via the \texttt{GeographicKFold} class in \texttt{elapid} \citep{Valavi2019}. 
 The splitter partitions all 18,310 sample locations into four spatially 
 contiguous blocks using $k$-means clustering on point coordinates, so that geographically proximate 
@@ -335,11 +338,18 @@ areas \citep{Roberts2017}. A spatially cross-validated AUC of 0.69 nonetheless i
 but genuine discriminatory ability.
 
 \section{Variable importance and response curves}
-Variable importance was assessed using permutation importance: each predictor was randomly shuffled 10 times, breaking its relationship with the response, and the resulting mean drop in AUC was recorded. This approach evaluates each variable's contribution on the full dataset after fitting, providing a more stable assessment than MaxEnt's built-in training-time contribution metrics, which can be sensitive to the order in which variables enter the model \citep{Elith2011}. Permutation importance revealed a clear hierarchy among predictors (Fig.~\ref{fig:variable_importance}). MODIS daytime LST was the single most important variable, with a mean AUC drop of 0.200 when shuffled, followed by Landsat summer LST (0.152), MODIS nighttime LST (0.085), and VIIRS nighttime radiance (0.059). Temperature variables thus collectively dominate model performance, accounting for the majority of the explained variation in habitat suitability. VIIRS radiance contributes a smaller but distinct and non-redundant signal, consistent with the low correlation between ALAN and LST identified in the exploratory analysis.
+Variable importance was assessed using permutation importance \citep{Elith2011}: for each predictor in turn, 
+the observed values were randomly reordered across sites 10 times, destroying the association between that variable and o
+ccurrence while leaving all other predictors intact. 
+The model was then re-evaluated on each permuted dataset and the mean drop in AUC relative to the unpermuted baseline was recorded. 
+%A large AUC drop indicates that the model relies heavily on that variable; a small drop indicates redundancy with the remaining p
+%redictors. 
+Permutation importance revealed a clear hierarchy among predictors (Fig.~\ref{fig:variable_importance}).
+ MODIS daytime LST was the single most important variable, with a mean AUC drop of 0.2 when shuffled, followed by Landsat summer LST (0.152), MODIS nighttime LST (0.085), and VIIRS nighttime radiance (0.059). Temperature variables thus collectively dominate model performance, accounting for the majority of the explained variation in habitat suitability. VIIRS radiance contributes a smaller but distinct and non-redundant signal, consistent with the low correlation between ALAN and LST identified in the exploratory analysis.
 
 \begin{figure}[!tbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{../outputs/variable_importance.png}
+\includegraphics[width=\columnwidth]{../outputs/variable_importance.png}
 \caption{Permutation importance of the four satellite-derived predictors, measured as the mean drop in AUC ($\pm$ s.d.) when each variable is randomly shuffled (10 permutations). MODIS daytime LST is the strongest predictor (AUC drop = 0.20), followed by Landsat summer LST (0.15), MODIS nighttime LST (0.09), and VIIRS nighttime radiance (0.06).}
 \label{fig:variable_importance}
 \end{figure}
@@ -352,18 +362,23 @@ Variable importance was assessed using permutation importance: each predictor wa
 \end{figure}
 
 
-Marginal response curves illustrate the shape of the modelled relationships between each predictor and habitat suitability (Fig.~\ref{fig:response_curves}). Predicted suitability increases monotonically with VIIRS nighttime radiance, rising steeply below ${\sim}$20~nW/cm$^{2}$/sr and saturating above ${\sim}$60~nW/cm$^{2}$/sr. For MODIS daytime LST, suitability is highest at cooler values of 10--14\textdegree C and declines sharply above ${\sim}$18\textdegree C, reflecting the species' current core range in the mild maritime climates of the British Isles and Atlantic France rather than in warmer Mediterranean regions. MODIS nighttime LST shows a unimodal response peaking at 8--10\textdegree C, consistent with the moderate nocturnal temperatures typical of maritime urban environments. Landsat summer LST exhibits increasing suitability above ${\sim}$30\textdegree C, capturing the localised warming associated with built-up surfaces during the summer months.
+We also produced marginal response curves, demonstrating the shape of the modelled relationships between each predictor and habitat suitability (Fig.~\ref{fig:response_curves}). Predicted suitability increases monotonically with VIIRS nighttime radiance, rising steeply below ${\sim}$20~nW\,cm$^{-2}$\,sr$^{-1}$ and saturating above ${\sim}$60~nW\,cm$^{-2}$\,sr$^{-1}$. For MODIS daytime LST, suitability is highest at cooler values of 10--14\textdegree C and declines sharply above ${\sim}$18\textdegree C, reflecting the species' current core range in the mild maritime climates of the British Isles and Atlantic France rather than in warmer Mediterranean regions. MODIS nighttime LST shows a unimodal response peaking at 8--10\textdegree C, consistent with the moderate nocturnal temperatures typical of maritime urban environments. Landsat summer LST exhibits increasing suitability above ${\sim}$30\textdegree C, capturing the localised warming associated with built-up surfaces during the summer months.
+
+\section{High-suitability uncolonised regions}
+\begin{figure}[!tbp]
+\centering
+\includegraphics[width=\columnwidth]{../outputs/ireland_uncolonised_suitable.png}
+\caption{Map of Ireland showing ${\sim}$10~km grid cells already colonised by \textit{S.~nobilis} (yellow circles; $n = 72$), high-suitability cells ($\geq$ 0.4) with no \textit{S.~nobilis} records to date (green diamonds; $n = 34$), and uncolonised suitable cells in which the control species \textit{P.~phalangioides} has been recorded (blue squares; $n = 4$). The presence of \textit{P.~phalangioides} in these cells confirms active citizen-science recording in the area, suggesting that the absence of \textit{S.~nobilis} reflects genuine non-occurrence rather than a lack of observer effort.}
+\label{fig:uncolonised_suitable}
+\end{figure}
+To identify areas where the species has not yet been recorded but where the model predicts favourable conditions, we aggregated the Ireland suitability surface to ${\sim}$10~km grid cells and compared already-colonised cells ($n = 72$ with $\geq$1 record) against cells with high predicted suitability ($\geq$ 0.4) but no records to date (Fig.~\ref{fig:uncolonised_suitable}). A total of 34 high-suitability uncolonised cells were identified, concentrated in the Irish midlands and in regional towns with moderate urban development but relatively low citizen-science recorder activity. The top candidate areas for future colonisation include the Tullamore--Athlone corridor in the midlands, the greater Waterford area, Naas and surrounding County Kildare, the Ennis--Shannon area in County Clare, Navan in County Meath, and the Dundalk--Newry cross-border region. These locations share common characteristics: moderate levels of artificial lighting, proximity to existing colonised cells, and the presence of residential and commercial buildings that provide the heated structures favoured by the species.
+
+A key question is whether these uncolonised cells genuinely lack the species or simply lack citizen-science recording effort. To address this, we examined whether the control species \textit{P.~phalangioides} has been recorded in any of the 34 high-suitability uncolonised cells (Fig.~\ref{fig:uncolonised_suitable}). Four cells (12\%) contained at least one research-grade \textit{P.~phalangioides} record, confirming that iNaturalist users are active in those areas. The absence of \textit{S.~nobilis} from cells with documented recorder activity strengthens the interpretation that these represent sites of genuine non-occurrence rather than surveillance gaps. The remaining 30 cells lack records of either species, so under-recording cannot be ruled out; targeted field surveys in these areas would help distinguish true absence from detection failure.
 
 \section{Discussion}
 
 This study demonstrates that satellite-derived measurements of artificial light at night and land surface temperature can effectively predict the distribution of the invasive noble false widow spider \textit{S.~nobilis} across Western Europe. Using only four remotely sensed environmental variables, the MaxEnt model achieved a spatially cross-validated AUC of 0.69, correctly identifying known hotspots in southeastern England, northern France, and Irish urban centres while also highlighting areas of predicted suitability that have not yet been colonised.
 
-\begin{figure}[!tbp]
-\centering
-\includegraphics[width=\columnwidth]{../outputs/ireland_uncolonised_suitable.png}
-\caption{Map of Ireland showing ${\sim}$10~km grid cells already colonised by \textit{S.~nobilis} (blue circles; $n = 72$) and high-suitability cells ($\geq$ 0.4) with no records to date (cyan diamonds; $n = 34$). Uncolonised suitable cells are concentrated in the midlands and regional towns such as Tullamore, Athlone, Waterford, Naas, Ennis, and Dundalk, representing the most likely sites for future establishment.}
-\label{fig:uncolonised_suitable}
-\end{figure}
 The dominance of thermal variables in the model --- MODIS daytime LST alone accounted for an AUC drop of 0.20 under permutation --- is consistent with the known physiology and ecology of \textit{S.~nobilis}. As an ectotherm of subtropical origin, the species is constrained by minimum thermal thresholds for survival and reproduction \citep{Bauer2019}. The response curve for MODIS daytime LST, which peaks at 10--14\textdegree C, corresponds closely to the mean annual temperatures of the British Isles and Atlantic France, where the species has been most successful. The decline in predicted suitability at higher daytime LST values ($>$18\textdegree C) likely reflects a modelling artefact rather than true thermal unsuitability: occurrences in the warmer Mediterranean portion of the species' native range are fewer in the citizen-science dataset, reducing the model's ability to capture suitability in those environments. Future work incorporating occurrence data from the full native range in Macaronesia and North Africa would help resolve this asymmetry.
 
 VIIRS nighttime radiance, while ranking fourth in permutation importance, contributes ecological information that is not captured by temperature alone. Its weak correlation with the three LST variables ($r = 0.25$--$0.34$) confirms that artificial light represents an independent environmental axis. The monotonic, saturating response curve for VIIRS radiance is consistent with the hypothesis that \textit{S.~nobilis} benefits from ALAN both directly --- through increased prey availability around light sources \citep{GastonBennie2014} --- and indirectly, as a spatial proxy for the density of heated buildings and human infrastructure that provide overwintering refugia. The relatively modest contribution of ALAN to overall model performance may partly reflect the coarse spatial resolution of VIIRS (750~m native), which smooths the sharp gradients in light intensity found between individual buildings and their surroundings. Higher-resolution nighttime light data, such as those from the International Space Station or commercial satellite constellations, could potentially improve discrimination at local scales.
